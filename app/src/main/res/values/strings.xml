@@ -3,4 +3,15 @@
     <string name="byCleanBits">by CleanBits</string>
     <string name="loading">Loading…</string>
     <string name="rightsreserved">All Rights Reserved</string>
+    <string name="login">Login</string>
+    <string name="dontHaveAccount">Don\'t have an account?</string>
+    <string name="signUp">Sign Up</string>
+    <string name="e_mail_address">E-mail</string>
+    <string name="password">Password</string>
+    <string name="forgot_your_password">Forgot Password?</string>
+    <string name="or">or</string>
+    <string name="alreadyHaveAccount">Already have an account?</string>
+    <string name="name">Name</string>
+    <string name="username">Username</string>
+    <string name="surname">Surname</string>
 </resources>
