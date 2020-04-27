@@ -18,7 +18,7 @@
         android:text="@string/app_name"
         android:textAlignment="center"
         android:textColor="#258039"
-        android:textSize="40sp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,7 @@
         android:text="@string/signUp"
         android:textAlignment="center"
         android:textColor="#258039"
-        android:textSize="50sp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line1" />
@@ -92,7 +92,7 @@
         android:id="@+id/nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:autofillHints=""
         android:ems="15"
         android:hint="@string/name"
@@ -106,27 +106,10 @@
         tools:targetApi="o" />
 
     <EditText
-        android:id="@+id/surnameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:autofillHints=""
-        android:ems="15"
-        android:hint="@string/surname"
-        android:inputType="textPersonName"
-        android:textColor="#258039"
-        android:textColorHint="#258039"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameText"
-        tools:targetApi="o" />
-
-    <EditText
         android:id="@+id/usernameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:autofillHints=""
         android:ems="15"
         android:hint="@string/username"
@@ -135,7 +118,7 @@
         android:textColorHint="#258039"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/surnameText"
+        app:layout_constraintTop_toBottomOf="@+id/nameText"
         tools:targetApi="o" />
 
     <EditText
@@ -143,7 +126,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/usernameText"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:autofillHints=""
         android:ems="15"
         android:hint="@string/e_mail_address"
@@ -159,7 +142,7 @@
         android:id="@+id/passwordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:autofillHints=""
         android:ems="15"
         android:hint="@string/password"
@@ -175,15 +158,13 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
         android:backgroundTint="#258039"
         android:onClick="SignUpButtonClicked"
         android:text="@string/signUp"
         android:textAllCaps="false"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordText" />

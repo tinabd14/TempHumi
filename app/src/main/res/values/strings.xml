@@ -14,4 +14,7 @@
     <string name="name">Name</string>
     <string name="username">Username</string>
     <string name="surname">Surname</string>
+    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
+    <string name="back4app_app_id">I7VxcvcuBgkI4EhQTzawv9bPZQKQGZC08G3pGIxX</string>
+    <string name="back4app_client_key">E6TuqgTwsesHwHgRFxt3Wykn6kD9wBmMPIat3kYY</string>
 </resources>

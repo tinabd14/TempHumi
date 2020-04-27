@@ -6,8 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.example.temphumi.Model.SharedPreferencesModel;
 import com.example.temphumi.R;
+import com.parse.ParseInstallation;
+import com.parse.ParseUser;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -16,11 +17,12 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        ParseInstallation.getCurrentInstallation().saveInBackground();
         CheckUserAuthentication();
     }
 
     private void CheckUserAuthentication() {
-        if (SharedPreferencesModel.getInstance(this).isLoggedIn()) {
+        if (ParseUser.getCurrentUser() != null) {
             finish();
             Splash(MainActivity.class);
             return;
