@@ -21,4 +21,13 @@
     <string name="logout">Log out</string>
     <string name="resetPassword">Reset password</string>
     <string name="checkEmail">Please, check your e-mail</string>
+    <string name="enter_an_institution">Enter an institution...</string>
+    <string name="submit">Submit</string>
+    <string name="unknown">0</string>
+    <string name="ideal_temperature">Ideal Temperature</string>
+    <string name="ideal_humidity">Ideal Humidity</string>
+    <string name="score">Score</string>
+    <string name="next">Next</string>
+    <string name="finish">Finish</string>
+    <string name="cancel">Cancel</string>
 </resources>
