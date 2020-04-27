@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.temphumi.R;
@@ -28,12 +29,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Login(View view) {
-        //TODO: sign in the user
         ParseUser.logInInBackground(usernameEditText.getText().toString(), passwordEditText.getText().toString(), new LogInCallback() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
                 if (parseUser != null) {
-                    alertDisplayer("Sucessful Login","Welcome back " + parseUser.get("NAME") + "!");
+                    alertDisplayer("Sucessful Login","Welcome back, " + parseUser.get("NAME") + "!");
                 } else {
                     ParseUser.logOut();
                     Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -43,7 +43,32 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void ForgotPassword(View view) {
-        //TODO: reset password
+        final EditText input = new EditText(LoginActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
+        alertDialog.setTitle("Forgot Password");
+        alertDialog.setMessage("Enter your email");
+        alertDialog.setPositiveButton("Submit",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String email = input.getText().toString();
+                        try {
+                            ParseUser.requestPasswordReset(email);
+                            Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.checkEmail), Toast.LENGTH_LONG).show();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
     }
 
     public void GoToSignupActivity(View view) {
@@ -59,7 +84,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        // don't forget to change the line below with the names of your Activities
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

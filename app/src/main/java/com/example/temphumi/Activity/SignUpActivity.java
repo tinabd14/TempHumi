@@ -51,7 +51,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    alertDisplayer("Sucessful Sign Up!","Welcome " + nameEditText.getText().toString() + "!");
+                    alertDisplayer("Sucessful Sign Up!","Welcome, " + nameEditText.getText().toString() + "!");
                 } else {
                     ParseUser.logOut();
                     Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
