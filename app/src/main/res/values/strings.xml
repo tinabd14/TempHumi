@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">TempHumi</string>
+    <string name="byCleanBits">by CleanBits</string>
+    <string name="loading">Loading…</string>
+    <string name="rightsreserved">All Rights Reserved</string>
+</resources>
