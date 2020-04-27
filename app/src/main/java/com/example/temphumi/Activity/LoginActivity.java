@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         input.setLayoutParams(lp);
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
+        alertDialog.setView(input);
         alertDialog.setTitle("Forgot Password");
         alertDialog.setMessage("Enter your email");
         alertDialog.setPositiveButton("Submit",
