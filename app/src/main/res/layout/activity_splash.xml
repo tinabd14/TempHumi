@@ -41,7 +41,6 @@
         app:layout_constraintTop_toBottomOf="@+id/TempHumiTextView" />
 
     <TextView
-        android:id="@+id/loadingTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
@@ -55,7 +54,6 @@
         app:layout_constraintTop_toBottomOf="@+id/CleanBitsTextView" />
 
     <TextView
-        android:id="@+id/rightsreservedTextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"

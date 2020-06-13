@@ -1,7 +1,6 @@
 package com.example.temphumi.Model;
 
 public class Institution {
-    private String id;
     private String name;
     private String accessCode;
     private double idealTemp;
@@ -15,12 +14,11 @@ public class Institution {
     private double outsideHum;
     private double outsideCarbon;
 
-    public Institution(String id, String name, String accessCode,
+    public Institution(String name, String accessCode,
                        double idealTemp, double idealHum, double idealCarbon, double idealScore,
                        double insideTemp, double insideHum, double insideCarbon,
                        double outsideTemp, double outsideHum, double outsideCarbon)
     {
-        this.id = id;
         this.name = name;
         this.accessCode = accessCode;
         this.idealTemp = idealTemp;
@@ -33,10 +31,6 @@ public class Institution {
         this.outsideTemp = outsideTemp;
         this.outsideHum = outsideHum;
         this.outsideCarbon = outsideCarbon;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getName() {
@@ -61,10 +55,6 @@ public class Institution {
 
     public void setAccessCode(String accessCode) {
         this.accessCode = accessCode;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public double getIdealHum() {

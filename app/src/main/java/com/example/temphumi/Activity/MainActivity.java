@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,21 +21,23 @@ import com.example.temphumi.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import tgio.parselivequery.BaseQuery;
-import tgio.parselivequery.LiveQueryEvent;
-import tgio.parselivequery.Subscription;
-import tgio.parselivequery.interfaces.OnListener;
+import com.parse.livequery.ParseLiveQueryClient;
+import com.parse.livequery.SubscriptionHandling;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     TextView name;
-    EditText accessCode;
+    EditText accessCodeEditText;
     TextView insideTemp;
     TextView insideHum;
     TextView insideCarbon;
@@ -42,17 +46,20 @@ public class MainActivity extends AppCompatActivity {
     TextView outsideCarbon;
 
     EditText score;
+    String accessCode;
     int count = 0;
     double sum = 0;
     double avgScore;
+    boolean pushSent;
 
     Institution institution;
-    boolean valid;
+    ParseLiveQueryClient parseLiveQueryClient = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        accessCode = findViewById(R.id.institutionEditText);
+        accessCodeEditText = findViewById(R.id.institutionEditText);
+        name = findViewById(R.id.name);
         insideTemp = findViewById(R.id.insideTemp);
         insideHum = findViewById(R.id.insideHum);
         insideCarbon = findViewById(R.id.insideClean);
@@ -62,7 +69,22 @@ public class MainActivity extends AppCompatActivity {
         outsideCarbon = findViewById(R.id.outsideClean);
 
         score = findViewById(R.id.scoreEditText);
-        valid = false;
+
+        try {
+            parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient(new URI("wss://temphumi.back4app.io/"));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        final Handler handler = new Handler();
+        final int delay = 10000;
+
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                pushSent = false;
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
     @Override
@@ -123,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void FindInstitution() {
+        accessCode = accessCodeEditText.getText().toString();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Institution");
         query.whereEqualTo("accessCode", accessCode);
 
@@ -133,67 +156,214 @@ public class MainActivity extends AppCompatActivity {
                 {
                     if(objects.size() > 0)
                     {
-                        valid = true;
+                        ParseObject object = objects.get(0);
+                        String name = object.getString("name");
+
+                        double idealTemp = object.getDouble("idealTemp");
+                        double idealHum = object.getDouble("idealHum");
+                        double idealCarbon = object.getDouble("idealCarbon");
+                        double idealScore = object.getDouble("idealScore");
+
+                        double insideTemp = object.getDouble("insideTemp");
+                        double insideHum = object.getDouble("insideHum");
+                        double insideCarbon = object.getDouble("insideCarbon");
+
+                        double outsideTemp = object.getDouble("outsideTemp");
+                        double outsideHum = object.getDouble("outsideHum");
+                        double outsideCarbon = object.getDouble("outsideCarbon");
+
+                        institution = new Institution(name,accessCode,
+                                idealTemp,idealHum,idealCarbon,idealScore,
+                                insideTemp,insideHum,insideCarbon,
+                                outsideTemp,outsideHum,outsideCarbon);
+
+                        UpdateUI();
                         SetupLiveQuery();
                     }
                     else
                     {
                         Toast.makeText(MainActivity.this, "Couldn't find institution...", Toast.LENGTH_SHORT).show();
-                        valid = false;
                     }
                 }
                 else
                 {
                     Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    valid = false;
                 }
             }
         });
     }
 
     private void SetupLiveQuery() {
-        final Subscription sub = new BaseQuery.Builder("Institution")
-                .where("objectId", institution.getId())
-                .build()
-                .subscribe();
+        if (parseLiveQueryClient != null) {
+            ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("Institution");
+            parseQuery.whereEqualTo("accessCode", institution.getAccessCode());
+            SubscriptionHandling<ParseObject> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
 
-        sub.on(LiveQueryEvent.CREATE, new OnListener() {
-            @Override
-            public void on(JSONObject object) {
-                final JSONObject object1 = object;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            String id = object1.getString("objectId");
-                            String name = object1.getString("name");
+            subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new SubscriptionHandling.HandleEventCallback<ParseObject>() {
+                @Override
+                public void onEvent(ParseQuery<ParseObject> query, final ParseObject object) {
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        public void run() {
+                            double insideTemp = object.getDouble("insideTemp");
+                            double insideHum = object.getDouble("insideHum");
+                            double insideCarbon = object.getDouble("insideCarbon");
 
-                            double idealTemp = object1.getDouble("idealTemp");
-                            double idealHum = object1.getDouble("idealHum");
-                            double idealCarbon = object1.getDouble("idealCarbon");
-                            double idealScore = object1.getDouble("idealScore");
+                            double outsideTemp = object.getDouble("outsideTemp");
+                            double outsideHum = object.getDouble("outsideHum");
+                            double outsideCarbon = object.getDouble("outsideCarbon");
 
-                            double insideTemp = object1.getDouble("insideTemp");
-                            double insideHum = object1.getDouble("insideHum");
-                            double insideCarbon = object1.getDouble("insideCarbon");
+                            institution.setInsideTemp(insideTemp);
+                            institution.setInsideHum(insideHum);
+                            institution.setInsideCarbon(insideCarbon);
 
-                            double outsideTemp = object1.getDouble("outsideTemp");
-                            double outsideHum = object1.getDouble("outsideHum");
-                            double outsideCarbon = object1.getDouble("outsideCarbon");
-
-                            institution = new Institution(id,name,accessCode.getText().toString(),
-                                    idealTemp,idealHum,idealCarbon,idealScore,
-                                    insideTemp,insideHum,insideCarbon,
-                                    outsideTemp,outsideHum,outsideCarbon);
+                            institution.setOutsideTemp(outsideTemp);
+                            institution.setOutsideHum(outsideHum);
+                            institution.setOutsideCarbon(outsideCarbon);
 
                             UpdateUI();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+
+                            if(!pushSent)
+                            {
+                                try {
+                                    SendPushNotification(institution.getIdealTemp(), institution.getIdealHum(), institution.getIdealCarbon(),
+                                            insideTemp, insideHum, insideCarbon,
+                                            outsideTemp, outsideHum, outsideCarbon);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
+                    });
+                }
+            });
+        }
+    }
+
+    private void SendPushNotification(double idealTemp, double idealHum, double idealCarbon,
+                                      double insideTemp, double insideHum, double insideCarbon,
+                                      double outsideTemp, double outsideHum, double outsideCarbon) throws JSONException {
+        JSONObject data = new JSONObject();
+        String title;
+        String alert;
+
+        if(insideTemp != idealTemp)
+        {
+            if(insideTemp > idealTemp)
+            {
+                title = "It is hot inside";
+                if(outsideTemp < insideTemp)
+                {
+                    if(outsideCarbon >= idealCarbon)
+                    {
+                        alert = (insideTemp - idealTemp) + "'C hotter.\nAir is clean outside. Open the window to get cooler";
                     }
-                });
+                    else
+                    {
+                        alert = (insideTemp - idealTemp) + "'C hotter.\nAir is dirty outside. Use clima to get cooler";
+                    }
+                }
+                else
+                {
+                    alert = (insideTemp - idealTemp) + "'C hotter.\nUse clima to get cooler";
+                }
             }
-        });
+            else
+            {
+                title = "It is cold inside";
+                if(outsideTemp > insideTemp)
+                {
+                    if(outsideCarbon >= idealCarbon)
+                    {
+                        alert = (idealTemp - insideTemp) + "'C colder.\nAir is clean outside. Open the window to get hotter";
+                    }
+                    else
+                    {
+                        alert = (idealTemp - insideTemp) + "'C colder.\nAir is dirty outside. Use clima to get hotter";
+                    }
+                }
+                else
+                {
+                    alert = (idealTemp - insideTemp) + "'C colder.\nUse clima to get cooler";
+                }
+            }
+            data.put("title", title);
+            data.put("alert", alert);
+            ParsePush push = new ParsePush();
+            push.setChannel("Temperature");
+            push.setData(data);
+            push.sendInBackground();
+            pushSent = true;
+        }
+        if(insideHum != idealHum)
+        {
+            if(insideHum > idealHum)
+            {
+                title = "High humidity inside";
+                if(outsideHum < insideHum)
+                {
+                    if(outsideCarbon >= idealCarbon)
+                    {
+                        alert = (insideHum - idealHum) + "% more humid.\nAir is clean outside. Open the window to reduce humidity";
+                    }
+                    else
+                    {
+                        alert = (insideHum - idealHum) + "% more humid.\nAir is dirty outside. Use dehumidifier to reduce humidity";
+                    }
+                }
+                else
+                {
+                    alert = (insideHum - idealHum) + "% more humid.\nUse dehumidifier to reduce humidity";
+                }
+            }
+            else
+            {
+                title = "Low humidity inside";
+                if(outsideHum > insideHum)
+                {
+                    if(outsideCarbon >= idealCarbon)
+                    {
+                        alert = (idealHum - insideHum) + "% less humid.\nAir is clean outside. Open the window to increase humidity";
+                    }
+                    else
+                    {
+                        alert = (idealHum - insideHum) + "% less humid.\nAir is dirty outside. Use humidifier to to increase humidity";
+                    }
+                }
+                else
+                {
+                    alert = (idealTemp - insideTemp) + "% less humid.\nUse humidifier to to increase humidity";
+                }
+            }
+            data.put("title", title);
+            data.put("alert", alert);
+            ParsePush push = new ParsePush();
+            push.setChannel("Humidity");
+            push.setData(data);
+            push.sendInBackground();
+            pushSent = true;
+        }
+        if(insideCarbon < idealCarbon)
+        {
+            title = "Dirty weather inside";
+            if(outsideCarbon >= idealCarbon)
+            {
+                alert = "Air is clean outside.\nOpen the window for fresh air";
+            }
+            else
+
+            {
+                alert = "Air is dirty outside.\nUse purifier for fresh air";
+            }
+
+            data.put("title", title);
+            data.put("alert", alert);
+            ParsePush push = new ParsePush();
+            push.setChannel("Carbon");
+            push.setData(data);
+            push.sendInBackground();
+            pushSent = true;
+        }
     }
 
     private void UpdateUI() {
@@ -222,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
         if(institution != null)
         {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Institution");
-            query.whereEqualTo("objectId", institution.getId());
+            query.whereEqualTo("accessCode", institution.getAccessCode());
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> objects, ParseException e) {

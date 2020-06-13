@@ -9,11 +9,9 @@
     <string name="e_mail_address">E-mail</string>
     <string name="password">Password</string>
     <string name="forgot_your_password">Forgot Password?</string>
-    <string name="or">or</string>
     <string name="alreadyHaveAccount">Already have an account?</string>
     <string name="name">Name</string>
     <string name="username">Username</string>
-    <string name="surname">Surname</string>
     <string name="back4app_server_url">https://parseapi.back4app.com/</string>
     <string name="back4app_app_id">I7VxcvcuBgkI4EhQTzawv9bPZQKQGZC08G3pGIxX</string>
     <string name="back4app_client_key">E6TuqgTwsesHwHgRFxt3Wykn6kD9wBmMPIat3kYY</string>
@@ -24,10 +22,10 @@
     <string name="enter_an_institution">Enter an institution...</string>
     <string name="submit">Submit</string>
     <string name="unknown">0</string>
-    <string name="ideal_temperature">Ideal Temperature</string>
-    <string name="ideal_humidity">Ideal Humidity</string>
     <string name="score">Score</string>
     <string name="next">Next</string>
     <string name="finish">Finish</string>
     <string name="cancel">Cancel</string>
+    <string name="inside">Inside</string>
+    <string name="outside">Outside</string>
 </resources>

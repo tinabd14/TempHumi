@@ -63,8 +63,59 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/inside">
+        </TextView>
+
         <LinearLayout
-            android:id="@+id/outsideLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/insideTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#FFBB00"
+                android:gravity="center"
+                android:text="@string/unknown"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/insideHum"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#375E97"
+                android:gravity="center"
+                android:text="@string/unknown"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/insideClean"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#4CAF50"
+                android:gravity="center"
+                android:text="@string/unknown"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/outside">
+        </TextView>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -103,57 +154,14 @@
                 android:textSize="25sp" />
         </LinearLayout>
 
-
-        <LinearLayout
-            android:id="@+id/insideLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/insideTemp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#FFBB00"
-                android:gravity="center"
-                android:text="@string/unknown"
-                android:textColor="#FFFFFF"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/insideHum"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#375E97"
-                android:gravity="center"
-                android:text="@string/unknown"
-                android:textColor="#FFFFFF"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/insideClean"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#4CAF50"
-                android:gravity="center"
-                android:text="@string/unknown"
-                android:textColor="#FFFFFF"
-                android:textSize="25sp" />
-        </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/calcLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="20dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -161,7 +169,7 @@
 
         <EditText
             android:id="@+id/scoreEditText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:autofillHints=""
@@ -171,28 +179,22 @@
             tools:targetApi="o" />
 
         <Button
-            android:id="@+id/nextButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:onClick="nextButtonClicked"
             android:text="@string/next"
             android:textSize="12sp" />
 
         <Button
-            android:id="@+id/finishButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:onClick="finishButtonClicked"
             android:text="@string/finish"
             android:textSize="12sp" />
 
         <Button
-            android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:onClick="cancelButtonClicked"
             android:text="@string/cancel"
             android:textSize="12sp" />
