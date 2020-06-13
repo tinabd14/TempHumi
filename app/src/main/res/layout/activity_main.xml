@@ -37,84 +37,132 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="@string/app_name"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/institutionEditText" />
+
     <LinearLayout
-        android:id="@+id/idealLayout"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="50dp"
-        android:orientation="horizontal"
+        android:id="@+id/envLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/institutionEditText">
+        app:layout_constraintTop_toBottomOf="@+id/name">
 
-        <TextView
-            android:id="@+id/idealTempTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="10sp"
-            android:layout_weight="1"
-            android:background="#FFBB00"
-            android:paddingLeft="50sp"
-            android:paddingTop="20sp"
-            android:paddingRight="50sp"
-            android:paddingBottom="20sp"
-            android:text="@string/unknown"
-            android:textColor="#FFFFFF"
-            android:textSize="25sp" />
+        <LinearLayout
+            android:id="@+id/outsideLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/idealHumTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="10sp"
-            android:layout_weight="1"
-            android:background="#375E97"
-            android:paddingLeft="50sp"
-            android:paddingTop="20sp"
-            android:paddingRight="50sp"
-            android:paddingBottom="20sp"
-            android:text="@string/unknown"
-            android:textColor="#FFFFFF"
-            android:textSize="25sp" />
+            <TextView
+                android:id="@+id/outsideTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#FFBB00"
+                android:gravity="center"
+                android:text="@string/unknown"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/outsideHum"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#375E97"
+                android:gravity="center"
+                android:text="@string/unknown"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/outsideClean"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#4CAF50"
+                android:gravity="center"
+                android:text="@string/unknown"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/insideLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/insideTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#FFBB00"
+                android:gravity="center"
+                android:text="@string/unknown"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/insideHum"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#375E97"
+                android:gravity="center"
+                android:text="@string/unknown"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/insideClean"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#4CAF50"
+                android:gravity="center"
+                android:text="@string/unknown"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+        </LinearLayout>
+
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/ideal_temperature"
-        android:textColor="#258039"
-        app:layout_constraintEnd_toStartOf="@+id/textView3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idealLayout" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="70dp"
-        android:text="@string/ideal_humidity"
-        android:textColor="#258039"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idealLayout" />
 
     <LinearLayout
         android:id="@+id/calcLayout"
-        android:layout_width="375dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="50dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toBottomOf="@+id/envLayout">
 
         <EditText
             android:id="@+id/scoreEditText"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_margin="10sp"
             android:layout_weight="1"
             android:autofillHints=""
             android:ems="4"
@@ -126,7 +174,6 @@
             android:id="@+id/nextButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_margin="10sp"
             android:layout_weight="1"
             android:onClick="nextButtonClicked"
             android:text="@string/next"
@@ -136,7 +183,6 @@
             android:id="@+id/finishButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_margin="10sp"
             android:layout_weight="1"
             android:onClick="finishButtonClicked"
             android:text="@string/finish"
@@ -146,7 +192,6 @@
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_margin="10sp"
             android:layout_weight="1"
             android:onClick="cancelButtonClicked"
             android:text="@string/cancel"
