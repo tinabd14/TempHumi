@@ -25,11 +25,12 @@ public class SplashActivity extends AppCompatActivity {
         if (ParseUser.getCurrentUser() != null) {
             finish();
             Splash(MainActivity.class);
-            return;
+            finish();
         }
         else
         {
             Splash(LoginActivity.class);
+            finish();
         }
     }
 

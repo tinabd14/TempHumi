@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     int count = 0;
     double sum = 0;
     double avgScore;
-    boolean pushSent;
 
     Institution institution;
     ParseLiveQueryClient parseLiveQueryClient = null;
@@ -76,15 +76,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        final Handler handler = new Handler();
-        final int delay = 10000;
-
-        handler.postDelayed(new Runnable(){
-            public void run(){
-                pushSent = false;
-                handler.postDelayed(this, delay);
-            }
-        }, delay);
     }
 
     @Override
@@ -222,16 +213,12 @@ public class MainActivity extends AppCompatActivity {
                             institution.setOutsideCarbon(outsideCarbon);
 
                             UpdateUI();
-
-                            if(!pushSent)
-                            {
-                                try {
-                                    SendPushNotification(institution.getIdealTemp(), institution.getIdealHum(), institution.getIdealCarbon(),
-                                            insideTemp, insideHum, insideCarbon,
-                                            outsideTemp, outsideHum, outsideCarbon);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                            try {
+                                SendPushNotification(institution.getIdealTemp(), institution.getIdealHum(), institution.getIdealCarbon(),
+                                        insideTemp, insideHum, insideCarbon,
+                                        outsideTemp, outsideHum, outsideCarbon);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
                         }
                     });
@@ -242,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void SendPushNotification(double idealTemp, double idealHum, double idealCarbon,
                                       double insideTemp, double insideHum, double insideCarbon,
-                                      double outsideTemp, double outsideHum, double outsideCarbon) throws JSONException {
+                                      double outsideTemp, double outsideHum, double outsideCarbon) throws JSONException, IllegalArgumentException {
         JSONObject data = new JSONObject();
         String title;
         String alert;
@@ -254,18 +241,18 @@ public class MainActivity extends AppCompatActivity {
                 title = "It is hot inside";
                 if(outsideTemp < insideTemp)
                 {
-                    if(outsideCarbon >= idealCarbon)
+                    if(outsideCarbon <= idealCarbon)
                     {
-                        alert = (insideTemp - idealTemp) + "'C hotter.\nAir is clean outside. Open the window to get cooler";
+                        alert = String.format(Locale.US,"%.1f", (insideTemp - idealTemp)) + "'C hotter.\nAir is clean outside. Open the window to get cooler";
                     }
                     else
                     {
-                        alert = (insideTemp - idealTemp) + "'C hotter.\nAir is dirty outside. Use clima to get cooler";
+                        alert = String.format(Locale.US,"%.1f", (insideTemp - idealTemp)) + "'C hotter.\nAir is dirty outside. Use clima to get cooler";
                     }
                 }
                 else
                 {
-                    alert = (insideTemp - idealTemp) + "'C hotter.\nUse clima to get cooler";
+                    alert = String.format(Locale.US,"%.1f", (insideTemp - idealTemp)) + "'C hotter.\nUse clima to get cooler";
                 }
             }
             else
@@ -273,27 +260,26 @@ public class MainActivity extends AppCompatActivity {
                 title = "It is cold inside";
                 if(outsideTemp > insideTemp)
                 {
-                    if(outsideCarbon >= idealCarbon)
+                    if(outsideCarbon <= idealCarbon)
                     {
-                        alert = (idealTemp - insideTemp) + "'C colder.\nAir is clean outside. Open the window to get hotter";
+                        alert = String.format(Locale.US,"%.1f", (idealTemp - insideTemp)) + "'C colder.\nAir is clean outside. Open the window to get hotter";
                     }
                     else
                     {
-                        alert = (idealTemp - insideTemp) + "'C colder.\nAir is dirty outside. Use clima to get hotter";
+                        alert = String.format(Locale.US,"%.1f", (idealTemp - insideTemp)) + "'C colder.\nAir is dirty outside. Use clima to get hotter";
                     }
                 }
                 else
                 {
-                    alert = (idealTemp - insideTemp) + "'C colder.\nUse clima to get cooler";
+                    alert = String.format(Locale.US,"%.1f", (idealTemp - insideTemp)) + "'C colder.\nUse clima to get cooler";
                 }
             }
             data.put("title", title);
             data.put("alert", alert);
             ParsePush push = new ParsePush();
-            push.setChannel("Temperature");
+            push.setChannel("TempHumi");
             push.setData(data);
             push.sendInBackground();
-            pushSent = true;
         }
         if(insideHum != idealHum)
         {
@@ -302,18 +288,18 @@ public class MainActivity extends AppCompatActivity {
                 title = "High humidity inside";
                 if(outsideHum < insideHum)
                 {
-                    if(outsideCarbon >= idealCarbon)
+                    if(outsideCarbon <= idealCarbon)
                     {
-                        alert = (insideHum - idealHum) + "% more humid.\nAir is clean outside. Open the window to reduce humidity";
+                        alert = String.format(Locale.US,"%.2f", (insideHum - idealHum)) + "% more humid.\nAir is clean outside. Open the window to reduce humidity";
                     }
                     else
                     {
-                        alert = (insideHum - idealHum) + "% more humid.\nAir is dirty outside. Use dehumidifier to reduce humidity";
+                        alert = String.format(Locale.US,"%.2f", (insideHum - idealHum)) + "% more humid.\nAir is dirty outside. Use dehumidifier to reduce humidity";
                     }
                 }
                 else
                 {
-                    alert = (insideHum - idealHum) + "% more humid.\nUse dehumidifier to reduce humidity";
+                    alert = String.format(Locale.US,"%.2f", (insideHum - idealHum)) + "% more humid.\nUse dehumidifier to reduce humidity";
                 }
             }
             else
@@ -321,37 +307,35 @@ public class MainActivity extends AppCompatActivity {
                 title = "Low humidity inside";
                 if(outsideHum > insideHum)
                 {
-                    if(outsideCarbon >= idealCarbon)
+                    if(outsideCarbon <= idealCarbon)
                     {
-                        alert = (idealHum - insideHum) + "% less humid.\nAir is clean outside. Open the window to increase humidity";
+                        alert = String.format(Locale.US,"%.2f", (idealHum - insideHum)) + "% less humid.\nAir is clean outside. Open the window to increase humidity";
                     }
                     else
                     {
-                        alert = (idealHum - insideHum) + "% less humid.\nAir is dirty outside. Use humidifier to to increase humidity";
+                        alert = String.format(Locale.US,"%.2f", (idealHum - insideHum)) + "% less humid.\nAir is dirty outside. Use humidifier to to increase humidity";
                     }
                 }
                 else
                 {
-                    alert = (idealTemp - insideTemp) + "% less humid.\nUse humidifier to to increase humidity";
+                    alert = String.format(Locale.US,"%.2f", (idealHum - insideHum)) + "% less humid.\nUse humidifier to to increase humidity";
                 }
             }
             data.put("title", title);
             data.put("alert", alert);
             ParsePush push = new ParsePush();
-            push.setChannel("Humidity");
+            push.setChannel("TempHumi");
             push.setData(data);
             push.sendInBackground();
-            pushSent = true;
         }
-        if(insideCarbon < idealCarbon)
+        if(insideCarbon > idealCarbon)
         {
             title = "Dirty weather inside";
-            if(outsideCarbon >= idealCarbon)
+            if(outsideCarbon <= idealCarbon)
             {
                 alert = "Air is clean outside.\nOpen the window for fresh air";
             }
             else
-
             {
                 alert = "Air is dirty outside.\nUse purifier for fresh air";
             }
@@ -359,10 +343,9 @@ public class MainActivity extends AppCompatActivity {
             data.put("title", title);
             data.put("alert", alert);
             ParsePush push = new ParsePush();
-            push.setChannel("Carbon");
+            push.setChannel("TempHumi");
             push.setData(data);
             push.sendInBackground();
-            pushSent = true;
         }
     }
 
